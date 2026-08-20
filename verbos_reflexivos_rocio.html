@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Me lo cuido yo! — El juego de los verbos reflexivos | Spanish by ROCIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#fdbc1c;
+    --gold-deep:#e8a30a;
+    --coral:#f84445;
+    --coral-deep:#d92f30;
+    --cream:#fff8ec;
+    --panel:#ffffff;
+    --ink:#2b2015;
+    --dim:#8a7a63;
+    --line:rgba(43,32,21,0.10);
+    --display:'Fraunces', serif;
+    --body:'Poppins', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(253,188,28,0.16), transparent 40%),
+      radial-gradient(circle at 92% 88%, rgba(248,68,69,0.12), transparent 45%),
+      var(--cream);
+    color:var(--ink);
+    font-family:var(--body);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 16px;
+  }
+  ::selection{background:var(--gold); color:var(--ink);}
+
+  .stage{width:100%; max-width:640px;}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:34px 30px;
+    box-shadow:0 24px 60px rgba(43,32,21,0.12);
+  }
+  .screen{display:none;}
+  .screen.active{display:block;}
+
+  /* ---------- BRAND HEADER ---------- */
+  .brand-row{display:flex; align-items:center; justify-content:center; margin-bottom:18px;}
+  .brand-mark{
+    font-family:var(--display);
+    font-weight:700;
+    font-style:italic;
+    font-size:20px;
+    color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .brand-mark span{color:var(--coral);}
+  .brand-row.small{justify-content:flex-start; margin-bottom:16px;}
+  .brand-row.small .brand-mark{font-size:15px;}
+
+  .badge{
+    font-family:var(--body);
+    font-weight:600;
+    font-size:11.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--coral-deep);
+    background:rgba(248,68,69,0.10);
+    display:block;
+    padding:5px 12px;
+    border-radius:999px;
+    margin:0 auto 18px;
+    width:fit-content;
+    text-align:center;
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:700;
+    font-style:italic;
+    font-size:clamp(26px,6vw,38px);
+    line-height:1.1;
+    margin:0 0 16px;
+    color:var(--ink);
+    text-align:center;
+  }
+  h1 .hl{color:var(--coral);}
+  .sub{color:var(--dim); font-size:15px; max-width:48ch; margin:0 auto 26px; text-align:center;}
+
+  /* ---------- RULE CARDS ---------- */
+  .rules{display:grid; gap:10px; margin-bottom:24px;}
+  .rule{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-left:3px solid var(--gold-deep);
+    border-radius:10px;
+    padding:13px 16px;
+    font-size:13.5px;
+    color:var(--ink);
+  }
+  .rule b{color:var(--gold-deep); font-weight:700;}
+  .rule.neg{border-left-color:var(--coral);}
+  .rule.neg b{color:var(--coral-deep);}
+  .pron-table{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:24px;
+    font-family:var(--body);
+    font-size:13px;
+  }
+  .pron-cell{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 10px;
+    text-align:center;
+  }
+  .pron-cell b{display:block; color:var(--coral-deep); font-size:13.5px;}
+  .pron-cell span{color:var(--dim); font-size:11px;}
+
+  .btn{
+    font-family:var(--body);
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.02em;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:12px;
+    padding:15px 28px;
+    cursor:pointer;
+    width:100%;
+    transition:transform .15s ease, background .15s ease;
+    box-shadow:0 8px 18px rgba(248,68,69,0.28);
+  }
+  .btn:hover{background:var(--coral-deep); transform:translateY(-1px);}
+  .btn:active{transform:translateY(0);}
+  .btn.secondary{
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--line);
+    margin-top:10px;
+    box-shadow:none;
+  }
+  .btn.secondary:hover{background:var(--cream);}
+  .btn:disabled{opacity:.5; cursor:not-allowed; transform:none;}
+
+  /* ---------- GAME HUD ---------- */
+  .hud{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--body);
+    font-weight:600;
+    font-size:13px;
+    color:var(--dim);
+    margin-bottom:18px;
+  }
+  .hud .hearts{color:var(--coral); letter-spacing:2px; font-size:13px;}
+  .hud .score{color:var(--gold-deep); font-weight:700;}
+  .progress-track{
+    height:7px;
+    background:var(--cream);
+    border-radius:99px;
+    overflow:hidden;
+    margin-bottom:24px;
+    border:1px solid var(--line);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--gold), var(--coral));
+    width:0%;
+    transition:width .3s ease;
+  }
+
+  .prompt-label{
+    font-family:var(--body);
+    font-weight:600;
+    font-size:11.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--dim);
+    margin-bottom:8px;
+  }
+  .prompt{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 22px 20px;
+    margin-bottom:20px;
+  }
+  .sentence{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:20px;
+    line-height:1.5;
+    color:var(--ink);
+    margin-bottom:12px;
+  }
+  .blank{
+    display:inline-block;
+    min-width:64px;
+    border-bottom:2.5px solid var(--coral);
+    color:var(--coral);
+  }
+  .infinitive-tag{
+    font-family:var(--body);
+    font-weight:600;
+    font-size:12px;
+    color:var(--gold-deep);
+    background:rgba(253,188,28,0.18);
+    display:inline-block;
+    padding:4px 11px;
+    border-radius:999px;
+  }
+
+  .answer-row{
+    display:flex;
+    gap:10px;
+    margin-top:4px;
+  }
+  .answer-input{
+    flex:1;
+    font-family:var(--body);
+    font-size:16px;
+    font-weight:500;
+    background:#fff;
+    border:1.5px solid var(--line);
+    color:var(--ink);
+    border-radius:12px;
+    padding:13px 16px;
+    outline:none;
+    transition:.15s ease;
+  }
+  .answer-input:focus{border-color:var(--gold-deep);}
+  .answer-input.correct{background:rgba(253,188,28,0.18); border-color:var(--gold-deep); color:#7a5c05;}
+  .answer-input.wrong{background:rgba(248,68,69,0.12); border-color:var(--coral); color:var(--coral-deep);}
+  .answer-input[disabled]{cursor:default;}
+  .check-btn{
+    font-family:var(--body);
+    font-weight:700;
+    font-size:14px;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:12px;
+    padding:0 22px;
+    cursor:pointer;
+    transition:.15s ease;
+    box-shadow:0 6px 14px rgba(248,68,69,0.25);
+  }
+  .check-btn:hover{background:var(--coral-deep);}
+  .check-btn:disabled{opacity:.5; cursor:not-allowed;}
+
+  .hint{
+    margin-top:10px;
+    font-size:12px;
+    color:var(--dim);
+    font-style:italic;
+  }
+
+  .feedback{
+    margin-top:16px;
+    font-size:13.5px;
+    color:var(--dim);
+    min-height:20px;
+    font-weight:500;
+  }
+  .feedback.correct{color:var(--gold-deep); font-weight:600;}
+  .feedback.wrong{color:var(--coral-deep); font-weight:600;}
+
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  .shake{animation:shake .25s ease;}
+
+  /* ---------- END SCREEN ---------- */
+  .result-big{
+    font-family:var(--display);
+    font-weight:700;
+    font-style:italic;
+    font-size:56px;
+    color:var(--coral);
+    text-align:center;
+    margin:6px 0 4px;
+  }
+  .result-sub{
+    text-align:center;
+    color:var(--dim);
+    font-size:12.5px;
+    margin-bottom:26px;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .stat-row{
+    display:flex; justify-content:center; gap:26px;
+    margin-bottom:30px;
+  }
+  .stat{text-align:center;}
+  .stat .n{font-family:var(--display); font-weight:700; font-size:22px; color:var(--ink);}
+  .stat .l{font-size:10.5px; color:var(--dim); text-transform:uppercase; letter-spacing:.08em; font-weight:600;}
+
+  footer.dl{text-align:center; margin-top:18px;}
+  footer.dl .note{font-size:11px; color:var(--dim); margin-top:10px; letter-spacing:.02em;}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- INTRO -->
+  <div class="screen active card" id="screenIntro">
+    <div class="brand-row"><div class="brand-mark">Spanish <span>by ROCIO</span></div></div>
+    <div class="badge">Gramática española · modo interactivo</div>
+    <h1>¡Me lo cuido <span class="hl">yo</span>!</h1>
+    <p class="sub">Los verbos reflexivos indican que la acción recae sobre quien la realiza. Se conjugan con un pronombre reflexivo delante del verbo. Escribe la forma correcta en 40 frases para dominarlos.</p>
+
+    <div class="pron-table">
+      <div class="pron-cell"><b>me</b><span>yo</span></div>
+      <div class="pron-cell"><b>te</b><span>tú</span></div>
+      <div class="pron-cell"><b>se</b><span>él/ella/usted</span></div>
+      <div class="pron-cell"><b>nos</b><span>nosotros</span></div>
+      <div class="pron-cell"><b>os</b><span>vosotros</span></div>
+      <div class="pron-cell"><b>se</b><span>ellos/ustedes</span></div>
+    </div>
+
+    <div class="rules">
+      <div class="rule"><b>Regulares</b> → pronombre + verbo conjugado normalmente: yo me lavo, tú te peinas, nosotros nos bañamos.</div>
+      <div class="rule neg"><b>Con cambio de raíz</b> → acostarse (me acuesto), despertarse (me despierto), vestirse (me visto), sentirse (me siento), divertirse (me divierto).</div>
+    </div>
+
+    <button class="btn" id="startBtn">Jugar — 40 frases ▸</button>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen card" id="screenGame">
+    <div class="brand-row small"><div class="brand-mark">Spanish <span>by ROCIO</span></div></div>
+    <div class="hud">
+      <span>Frase <b id="qNum">1</b>/<span id="qTotal">40</span></span>
+      <span class="hearts" id="hearts">♥ ♥ ♥ ♥ ♥</span>
+      <span class="score">Puntos: <span id="scoreNum">0</span></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="prompt-label">Completa con el pronombre reflexivo + verbo</div>
+    <div class="prompt">
+      <div class="sentence" id="sentenceText"></div>
+      <span class="infinitive-tag" id="infinitiveTag"></span>
+    </div>
+
+    <div class="answer-row">
+      <input type="text" class="answer-input" id="answerInput" placeholder="Escribe aquí, ej: me levanto" autocomplete="off">
+      <button class="check-btn" id="checkBtn">Comprobar</button>
+    </div>
+    <div class="hint">Pulsa Enter o el botón para comprobar tu respuesta.</div>
+
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <!-- END -->
+  <div class="screen card" id="screenEnd">
+    <div class="brand-row"><div class="brand-mark">Spanish <span>by ROCIO</span></div></div>
+    <div class="badge">Resultado final</div>
+    <div class="result-big" id="finalScore">0</div>
+    <div class="result-sub" id="finalLabel">PUNTOS</div>
+    <div class="stat-row">
+      <div class="stat"><div class="n" id="finalCorrect">0</div><div class="l">Correctas</div></div>
+      <div class="stat"><div class="n" id="finalStreak">0</div><div class="l">Mejor racha</div></div>
+      <div class="stat"><div class="n" id="finalAccuracy">0%</div><div class="l">Precisión</div></div>
+    </div>
+    <button class="btn" id="replayBtn">Jugar de nuevo ▸</button>
+    <button class="btn secondary" id="downloadBtn">↓ Descargar este juego (.html)</button>
+    <footer class="dl"><div class="note">Spanish by ROCIO · archivo autocontenido, funciona sin conexión.</div></footer>
+  </div>
+
+</div>
+
+<script>
+/* ---------- QUESTION BANK: 40 frases, verbos reflexivos ---------- */
+const BANK = [
+  {sentence:"Yo ____ a las siete de la mañana.", infinitive:"levantarse", answer:"me levanto", note:"yo + me + levanto"},
+  {sentence:"¿A qué hora ____ tú?", infinitive:"ducharse (tú)", answer:"te duchas", note:"tú + te + duchas"},
+  {sentence:"Él ____ muy rápido cada mañana.", infinitive:"vestirse", answer:"se viste", note:"él + se + viste (e→i)"},
+  {sentence:"Nosotros ____ temprano los lunes.", infinitive:"despertarse", answer:"nos despertamos", note:"nosotros + nos + despertamos (e→ie)"},
+  {sentence:"Vosotros ____ demasiado tarde.", infinitive:"acostarse (vosotros)", answer:"os acostáis", note:"vosotros + os + acostáis (o→ue)"},
+  {sentence:"Los niños ____ viendo la televisión.", infinitive:"dormirse (ellos)", answer:"se duermen", note:"ellos + se + duermen (o→ue)"},
+  {sentence:"Yo ____ antes de salir de casa.", infinitive:"peinarse", answer:"me peino", note:"yo + me + peino"},
+  {sentence:"Ella ____ para la fiesta de esta noche.", infinitive:"maquillarse", answer:"se maquilla", note:"ella + se + maquilla"},
+  {sentence:"¿____ todos los días?", infinitive:"afeitarse (tú)", answer:"te afeitas", note:"tú + te + afeitas"},
+  {sentence:"Nosotros ____ en el mar cada verano.", infinitive:"bañarse", answer:"nos bañamos", note:"nosotros + nos + bañamos"},
+  {sentence:"Él ____ el pelo con el secador.", infinitive:"secarse", answer:"se seca", note:"él + se + seca"},
+  {sentence:"Yo ____ las manos antes de comer.", infinitive:"lavarse", answer:"me lavo", note:"yo + me + lavo"},
+  {sentence:"Ella ____ los dientes tres veces al día.", infinitive:"cepillarse", answer:"se cepilla", note:"ella + se + cepilla"},
+  {sentence:"Ustedes siempre ____ en la primera fila.", infinitive:"sentarse", answer:"se sientan", note:"ustedes + se + sientan (e→ie)"},
+  {sentence:"¿____ en casa este fin de semana?", infinitive:"quedarse (tú)", answer:"te quedas", note:"tú + te + quedas"},
+  {sentence:"Nosotros nunca ____ del trabajo.", infinitive:"quejarse", answer:"nos quejamos", note:"nosotros + nos + quejamos"},
+  {sentence:"Él ____ con mucha facilidad.", infinitive:"enojarse", answer:"se enoja", note:"él + se + enoja"},
+  {sentence:"Los estudiantes ____ en las clases largas.", infinitive:"aburrirse (ellos)", answer:"se aburren", note:"ellos + se + aburren"},
+  {sentence:"Yo ____ mucho por mi familia.", infinitive:"preocuparse", answer:"me preocupo", note:"yo + me + preocupo"},
+  {sentence:"Vosotros ____ en la playa todos los veranos.", infinitive:"relajarse (vosotros)", answer:"os relajáis", note:"vosotros + os + relajáis"},
+  {sentence:"¿____ de tu decisión?", infinitive:"arrepentirse (tú)", answer:"te arrepientes", note:"tú + te + arrepientes (e→ie)"},
+  {sentence:"Ella no ____ a hablar en público.", infinitive:"atreverse", answer:"se atreve", note:"ella + se + atreve"},
+  {sentence:"Nosotros ____ mucho en el trabajo.", infinitive:"esforzarse", answer:"nos esforzamos", note:"nosotros + nos + esforzamos (o→ue)"},
+  {sentence:"Yo ____ mucho después de correr.", infinitive:"cansarse", answer:"me canso", note:"yo + me + canso"},
+  {sentence:"Él ____ a la enseñanza desde hace años.", infinitive:"dedicarse", answer:"se dedica", note:"él + se + dedica"},
+  {sentence:"Mis padres ____ a otra ciudad el mes próximo.", infinitive:"mudarse (ellos)", answer:"se mudan", note:"ellos + se + mudan"},
+  {sentence:"¿Cuándo ____ tú y tu pareja?", infinitive:"casarse (tú)", answer:"te casas", note:"tú + te + casas"},
+  {sentence:"Ella ____ después de diez años de matrimonio.", infinitive:"divorciarse", answer:"se divorcia", note:"ella + se + divorcia"},
+  {sentence:"Yo ____ a terminar el proyecto a tiempo.", infinitive:"comprometerse", answer:"me comprometo", note:"yo + me + comprometo"},
+  {sentence:"Nosotros ____ cada mañana en el gimnasio.", infinitive:"entrenarse", answer:"nos entrenamos", note:"nosotros + nos + entrenamos"},
+  {sentence:"Él ____ de sus amigos en la estación.", infinitive:"despedirse", answer:"se despide", note:"él + se + despide (e→i)"},
+  {sentence:"Yo siempre ____ las llaves en casa.", infinitive:"olvidarse", answer:"me olvido", note:"yo + me + olvido"},
+  {sentence:"Ustedes ____ todos los viernes por la tarde.", infinitive:"reunirse", answer:"se reúnen", note:"ustedes + se + reúnen"},
+  {sentence:"¿Cómo ____ hoy, mejor que ayer?", infinitive:"encontrarse (tú)", answer:"te encuentras", note:"tú + te + encuentras (o→ue)"},
+  {sentence:"Ella ____ mucho mejor después de descansar.", infinitive:"sentirse", answer:"se siente", note:"ella + se + siente (e→ie)"},
+  {sentence:"Todos ____ alguna vez en la vida.", infinitive:"equivocarse (ellos)", answer:"se equivocan", note:"ellos + se + equivocan"},
+  {sentence:"Él ____ a firmar el contrato.", infinitive:"negarse", answer:"se niega", note:"él + se + niega (e→ie)"},
+  {sentence:"Yo siempre ____ en los pequeños detalles.", infinitive:"fijarse", answer:"me fijo", note:"yo + me + fijo"},
+  {sentence:"No ____ de nadie, es de mala educación.", infinitive:"burlarse (ellos)", answer:"se burlan", note:"ellos + se + burlan"},
+  {sentence:"Vosotros ____ demasiado tarde los domingos.", infinitive:"levantarse (vosotros)", answer:"os levantáis", note:"vosotros + os + levantáis"}
+];
+
+const ROUNDS = 40;
+const START_LIVES = 5;
+
+let questions = [];
+let idx = 0;
+let score = 0;
+let lives = START_LIVES;
+let correctCount = 0;
+let streak = 0;
+let bestStreak = 0;
+let locked = false;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function normalize(s){
+  return s
+    .toLowerCase()
+    .trim()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame(){
+  questions = shuffle(BANK);
+  idx = 0; score = 0; lives = START_LIVES; correctCount = 0; streak = 0; bestStreak = 0;
+  document.getElementById('qTotal').textContent = questions.length;
+  showScreen('screenGame');
+  renderQuestion();
+}
+
+function renderHUD(){
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('hearts').textContent = '♥ '.repeat(lives).trim() + ' ' + '♡ '.repeat(START_LIVES-lives).trim();
+  document.getElementById('progressFill').style.width = ((idx)/questions.length*100)+'%';
+}
+
+function renderQuestion(){
+  locked = false;
+  const q = questions[idx];
+  renderHUD();
+
+  const parts = q.sentence.split('____');
+  const sentenceEl = document.getElementById('sentenceText');
+  sentenceEl.innerHTML = parts[0] + '<span class="blank">_____</span>' + (parts[1] || '');
+  document.getElementById('infinitiveTag').textContent = q.infinitive;
+
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+
+  const input = document.getElementById('answerInput');
+  input.value = '';
+  input.className = 'answer-input';
+  input.disabled = false;
+  document.getElementById('checkBtn').disabled = false;
+  setTimeout(()=>input.focus(), 50);
+}
+
+function handleAnswer(){
+  if(locked) return;
+  const q = questions[idx];
+  const input = document.getElementById('answerInput');
+  const chosen = input.value;
+  if(!chosen.trim()) return;
+
+  locked = true;
+  input.disabled = true;
+  document.getElementById('checkBtn').disabled = true;
+
+  const fb = document.getElementById('feedback');
+  if(normalize(chosen) === normalize(q.answer)){
+    input.classList.add('correct');
+    score += 10 + streak*2;
+    correctCount++;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    fb.textContent = '✓ Correcto — ' + q.note;
+    fb.className = 'feedback correct';
+  } else {
+    input.classList.add('wrong');
+    input.classList.add('shake');
+    streak = 0;
+    lives--;
+    fb.textContent = '✗ Era «' + q.answer + '» — ' + q.note;
+    fb.className = 'feedback wrong';
+  }
+
+  setTimeout(()=>{
+    if(lives <= 0){
+      endGame();
+    } else if(idx+1 >= questions.length){
+      idx++;
+      endGame();
+    } else {
+      idx++;
+      renderQuestion();
+    }
+  }, 1600);
+}
+
+function endGame(){
+  document.getElementById('progressFill').style.width = '100%';
+  showScreen('screenEnd');
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('finalCorrect').textContent = correctCount + '/' + questions.length;
+  document.getElementById('finalStreak').textContent = bestStreak;
+  const acc = Math.round((correctCount/questions.length)*100);
+  document.getElementById('finalAccuracy').textContent = acc + '%';
+  document.getElementById('finalLabel').textContent = lives <= 0 ? 'SIN VIDAS — PUNTOS' : 'PUNTOS';
+}
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('replayBtn').addEventListener('click', startGame);
+document.getElementById('checkBtn').addEventListener('click', handleAnswer);
+document.getElementById('answerInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') handleAnswer();
+});
+
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'me-lo-cuido-yo-spanish-by-rocio.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+</script>
+
+</body>
+</html>
