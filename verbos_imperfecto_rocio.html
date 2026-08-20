@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Así era antes — El juego del imperfecto | Spanish by ROCIO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,600&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#fdbc1c;
+    --gold-deep:#e8a30a;
+    --coral:#f84445;
+    --coral-deep:#d92f30;
+    --cream:#fff8ec;
+    --panel:#ffffff;
+    --ink:#2b2015;
+    --dim:#8a7a63;
+    --line:rgba(43,32,21,0.10);
+    --display:'Fraunces', serif;
+    --body:'Poppins', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 12% 8%, rgba(253,188,28,0.16), transparent 40%),
+      radial-gradient(circle at 92% 88%, rgba(248,68,69,0.12), transparent 45%),
+      var(--cream);
+    color:var(--ink);
+    font-family:var(--body);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px 16px;
+  }
+  ::selection{background:var(--gold); color:var(--ink);}
+
+  .stage{width:100%; max-width:640px;}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:34px 30px;
+    box-shadow:0 24px 60px rgba(43,32,21,0.12);
+  }
+  .screen{display:none;}
+  .screen.active{display:block;}
+
+  /* ---------- BRAND HEADER ---------- */
+  .brand-row{display:flex; align-items:center; justify-content:center; margin-bottom:18px;}
+  .brand-mark{
+    font-family:var(--display);
+    font-weight:700;
+    font-style:italic;
+    font-size:20px;
+    color:var(--ink);
+    letter-spacing:.01em;
+  }
+  .brand-mark span{color:var(--coral);}
+  .brand-row.small{justify-content:flex-start; margin-bottom:16px;}
+  .brand-row.small .brand-mark{font-size:15px;}
+
+  .badge{
+    font-family:var(--body);
+    font-weight:600;
+    font-size:11.5px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--coral-deep);
+    background:rgba(248,68,69,0.10);
+    display:block;
+    padding:5px 12px;
+    border-radius:999px;
+    margin:0 auto 18px;
+    width:fit-content;
+    text-align:center;
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:700;
+    font-style:italic;
+    font-size:clamp(26px,6vw,38px);
+    line-height:1.1;
+    margin:0 0 16px;
+    color:var(--ink);
+    text-align:center;
+  }
+  h1 .hl{color:var(--coral);}
+  .sub{color:var(--dim); font-size:15px; max-width:48ch; margin:0 auto 26px; text-align:center;}
+
+  /* ---------- RULE CARDS ---------- */
+  .rules{display:grid; gap:10px; margin-bottom:24px;}
+  .rule{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-left:3px solid var(--gold-deep);
+    border-radius:10px;
+    padding:13px 16px;
+    font-size:13.5px;
+    color:var(--ink);
+  }
+  .rule b{color:var(--gold-deep); font-weight:700;}
+  .rule.neg{border-left-color:var(--coral);}
+  .rule.neg b{color:var(--coral-deep);}
+  .end-table{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:14px;
+    font-family:var(--body);
+    font-size:13px;
+  }
+  .end-cell{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 10px;
+    text-align:center;
+  }
+  .end-cell b{display:block; color:var(--coral-deep); font-size:13.5px;}
+  .end-cell span{color:var(--dim); font-size:11px;}
+  .end-group-label{
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--dim);
+    margin:14px 0 6px;
+  }
+
+  .btn{
+    font-family:var(--body);
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:.02em;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:12px;
+    padding:15px 28px;
+    cursor:pointer;
+    width:100%;
+    transition:transform .15s ease, background .15s ease;
+    box-shadow:0 8px 18px rgba(248,68,69,0.28);
+  }
+  .btn:hover{background:var(--coral-deep); transform:translateY(-1px);}
+  .btn:active{transform:translateY(0);}
+  .btn.secondary{
+    background:transparent;
+    color:var(--ink);
+    border:1.5px solid var(--line);
+    margin-top:10px;
+    box-shadow:none;
+  }
+  .btn.secondary:hover{background:var(--cream);}
+  .btn:disabled{opacity:.5; cursor:not-allowed; transform:none;}
+
+  /* ---------- GAME HUD ---------- */
+  .hud{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--body);
+    font-weight:600;
+    font-size:13px;
+    color:var(--dim);
+    margin-bottom:18px;
+  }
+  .hud .hearts{color:var(--coral); letter-spacing:2px; font-size:13px;}
+  .hud .score{color:var(--gold-deep); font-weight:700;}
+  .progress-track{
+    height:7px;
+    background:var(--cream);
+    border-radius:99px;
+    overflow:hidden;
+    margin-bottom:24px;
+    border:1px solid var(--line);
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, var(--gold), var(--coral));
+    width:0%;
+    transition:width .3s ease;
+  }
+
+  .prompt-label{
+    font-family:var(--body);
+    font-weight:600;
+    font-size:11.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--dim);
+    margin-bottom:8px;
+  }
+  .prompt{
+    background:var(--cream);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:22px 22px 20px;
+    margin-bottom:20px;
+  }
+  .sentence{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:20px;
+    line-height:1.5;
+    color:var(--ink);
+    margin-bottom:12px;
+  }
+  .blank{
+    display:inline-block;
+    min-width:64px;
+    border-bottom:2.5px solid var(--coral);
+    color:var(--coral);
+  }
+  .infinitive-tag{
+    font-family:var(--body);
+    font-weight:600;
+    font-size:12px;
+    color:var(--gold-deep);
+    background:rgba(253,188,28,0.18);
+    display:inline-block;
+    padding:4px 11px;
+    border-radius:999px;
+  }
+
+  .answer-row{
+    display:flex;
+    gap:10px;
+    margin-top:4px;
+  }
+  .answer-input{
+    flex:1;
+    font-family:var(--body);
+    font-size:16px;
+    font-weight:500;
+    background:#fff;
+    border:1.5px solid var(--line);
+    color:var(--ink);
+    border-radius:12px;
+    padding:13px 16px;
+    outline:none;
+    transition:.15s ease;
+  }
+  .answer-input:focus{border-color:var(--gold-deep);}
+  .answer-input.correct{background:rgba(253,188,28,0.18); border-color:var(--gold-deep); color:#7a5c05;}
+  .answer-input.wrong{background:rgba(248,68,69,0.12); border-color:var(--coral); color:var(--coral-deep);}
+  .answer-input[disabled]{cursor:default;}
+  .check-btn{
+    font-family:var(--body);
+    font-weight:700;
+    font-size:14px;
+    color:#fff;
+    background:var(--coral);
+    border:none;
+    border-radius:12px;
+    padding:0 22px;
+    cursor:pointer;
+    transition:.15s ease;
+    box-shadow:0 6px 14px rgba(248,68,69,0.25);
+  }
+  .check-btn:hover{background:var(--coral-deep);}
+  .check-btn:disabled{opacity:.5; cursor:not-allowed;}
+
+  .hint{
+    margin-top:10px;
+    font-size:12px;
+    color:var(--dim);
+    font-style:italic;
+  }
+
+  .feedback{
+    margin-top:16px;
+    font-size:13.5px;
+    color:var(--dim);
+    min-height:20px;
+    font-weight:500;
+  }
+  .feedback.correct{color:var(--gold-deep); font-weight:600;}
+  .feedback.wrong{color:var(--coral-deep); font-weight:600;}
+
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-6px);}
+    75%{transform:translateX(6px);}
+  }
+  .shake{animation:shake .25s ease;}
+
+  /* ---------- END SCREEN ---------- */
+  .result-big{
+    font-family:var(--display);
+    font-weight:700;
+    font-style:italic;
+    font-size:56px;
+    color:var(--coral);
+    text-align:center;
+    margin:6px 0 4px;
+  }
+  .result-sub{
+    text-align:center;
+    color:var(--dim);
+    font-size:12.5px;
+    margin-bottom:26px;
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .stat-row{
+    display:flex; justify-content:center; gap:26px;
+    margin-bottom:30px;
+  }
+  .stat{text-align:center;}
+  .stat .n{font-family:var(--display); font-weight:700; font-size:22px; color:var(--ink);}
+  .stat .l{font-size:10.5px; color:var(--dim); text-transform:uppercase; letter-spacing:.08em; font-weight:600;}
+
+  footer.dl{text-align:center; margin-top:18px;}
+  footer.dl .note{font-size:11px; color:var(--dim); margin-top:10px; letter-spacing:.02em;}
+</style>
+</head>
+<body>
+
+<div class="stage">
+
+  <!-- INTRO -->
+  <div class="screen active card" id="screenIntro">
+    <div class="brand-row"><div class="brand-mark">Spanish <span>by ROCIO</span></div></div>
+    <div class="badge">Gramática española · modo interactivo</div>
+    <h1>Así <span class="hl">era</span> antes</h1>
+    <p class="sub">El pretérito imperfecto describe acciones habituales, situaciones o descripciones en el pasado, sin marcar cuándo empezaron o terminaron. Escribe la forma correcta en 40 frases para dominarlo.</p>
+
+    <div class="end-group-label">-AR → -aba</div>
+    <div class="end-table">
+      <div class="end-cell"><b>hablaba</b><span>yo</span></div>
+      <div class="end-cell"><b>hablabas</b><span>tú</span></div>
+      <div class="end-cell"><b>hablaba</b><span>él/ella</span></div>
+      <div class="end-cell"><b>hablábamos</b><span>nosotros</span></div>
+      <div class="end-cell"><b>hablabais</b><span>vosotros</span></div>
+      <div class="end-cell"><b>hablaban</b><span>ellos</span></div>
+    </div>
+    <div class="end-group-label">-ER / -IR → -ía</div>
+    <div class="end-table">
+      <div class="end-cell"><b>vivía</b><span>yo</span></div>
+      <div class="end-cell"><b>vivías</b><span>tú</span></div>
+      <div class="end-cell"><b>vivía</b><span>él/ella</span></div>
+      <div class="end-cell"><b>vivíamos</b><span>nosotros</span></div>
+      <div class="end-cell"><b>vivíais</b><span>vosotros</span></div>
+      <div class="end-cell"><b>vivían</b><span>ellos</span></div>
+    </div>
+
+    <div class="rules">
+      <div class="rule neg"><b>Solo hay 3 verbos irregulares</b> → ser (era), ir (iba), ver (veía). Todos los demás son regulares.</div>
+    </div>
+
+    <button class="btn" id="startBtn">Jugar — 40 frases ▸</button>
+  </div>
+
+  <!-- GAME -->
+  <div class="screen card" id="screenGame">
+    <div class="brand-row small"><div class="brand-mark">Spanish <span>by ROCIO</span></div></div>
+    <div class="hud">
+      <span>Frase <b id="qNum">1</b>/<span id="qTotal">40</span></span>
+      <span class="hearts" id="hearts">♥ ♥ ♥ ♥ ♥</span>
+      <span class="score">Puntos: <span id="scoreNum">0</span></span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+    <div class="prompt-label">Completa con el verbo en imperfecto</div>
+    <div class="prompt">
+      <div class="sentence" id="sentenceText"></div>
+      <span class="infinitive-tag" id="infinitiveTag"></span>
+    </div>
+
+    <div class="answer-row">
+      <input type="text" class="answer-input" id="answerInput" placeholder="Escribe aquí, ej: hablaba" autocomplete="off">
+      <button class="check-btn" id="checkBtn">Comprobar</button>
+    </div>
+    <div class="hint">Pulsa Enter o el botón para comprobar tu respuesta.</div>
+
+    <div class="feedback" id="feedback"></div>
+  </div>
+
+  <!-- END -->
+  <div class="screen card" id="screenEnd">
+    <div class="brand-row"><div class="brand-mark">Spanish <span>by ROCIO</span></div></div>
+    <div class="badge">Resultado final</div>
+    <div class="result-big" id="finalScore">0</div>
+    <div class="result-sub" id="finalLabel">PUNTOS</div>
+    <div class="stat-row">
+      <div class="stat"><div class="n" id="finalCorrect">0</div><div class="l">Correctas</div></div>
+      <div class="stat"><div class="n" id="finalStreak">0</div><div class="l">Mejor racha</div></div>
+      <div class="stat"><div class="n" id="finalAccuracy">0%</div><div class="l">Precisión</div></div>
+    </div>
+    <button class="btn" id="replayBtn">Jugar de nuevo ▸</button>
+    <button class="btn secondary" id="downloadBtn">↓ Descargar este juego (.html)</button>
+    <footer class="dl"><div class="note">Spanish by ROCIO · archivo autocontenido, funciona sin conexión.</div></footer>
+  </div>
+
+</div>
+
+<script>
+/* ---------- QUESTION BANK: 40 frases, pretérito imperfecto ---------- */
+const BANK = [
+  {sentence:"Yo ____ mucho de pequeño.", infinitive:"hablar", answer:"hablaba", note:"yo + -aba"},
+  {sentence:"Tú ____ al parque todas las tardes.", infinitive:"caminar (tú)", answer:"caminabas", note:"tú + -abas"},
+  {sentence:"Él ____ al fútbol en el colegio.", infinitive:"jugar", answer:"jugaba", note:"él + -aba"},
+  {sentence:"Nosotros ____ en una casa muy pequeña.", infinitive:"vivir", answer:"vivíamos", note:"nosotros + -íamos"},
+  {sentence:"Vosotros ____ tarde los sábados.", infinitive:"comer (vosotros)", answer:"comíais", note:"vosotros + -íais"},
+  {sentence:"Ellos ____ a la playa cada verano.", infinitive:"viajar (ellos)", answer:"viajaban", note:"ellos + -aban"},
+  {sentence:"Yo nunca ____ los deberes a tiempo.", infinitive:"hacer", answer:"hacía", note:"yo + -ía (regular en imperfecto)"},
+  {sentence:"Tú ____ mucho miedo a la oscuridad.", infinitive:"tener (tú)", answer:"tenías", note:"tú + -ías"},
+  {sentence:"Ella ____ a su abuela todas las tardes.", infinitive:"visitar", answer:"visitaba", note:"ella + -aba"},
+  {sentence:"Nosotros ____ cuentos antes de dormir.", infinitive:"leer", answer:"leíamos", note:"nosotros + -íamos"},
+  {sentence:"Vosotros ____ en el mismo colegio.", infinitive:"estudiar (vosotros)", answer:"estudiabais", note:"vosotros + -abais"},
+  {sentence:"Ellos ____ muy felices en aquella época.", infinitive:"ser (ellos)", answer:"eran", note:"ellos + ser (irregular): eran"},
+  {sentence:"Yo ____ al colegio caminando cada mañana.", infinitive:"ir", answer:"iba", note:"yo + ir (irregular): iba"},
+  {sentence:"Tú ____ la televisión después de cenar.", infinitive:"ver (tú)", answer:"veías", note:"tú + ver (irregular): veías"},
+  {sentence:"Él ____ un perro pequeño de niño.", infinitive:"tener", answer:"tenía", note:"él + -ía"},
+  {sentence:"Nosotros ____ a nuestros primos los domingos.", infinitive:"ver", answer:"veíamos", note:"nosotros + ver (irregular): veíamos"},
+  {sentence:"Vosotros ____ en bicicleta al trabajo.", infinitive:"ir (vosotros)", answer:"ibais", note:"vosotros + ir (irregular): ibais"},
+  {sentence:"Ellos ____ mucho cuando eran pequeños.", infinitive:"reír (ellos)", answer:"reían", note:"ellos + -ían"},
+  {sentence:"Yo ____ triste cuando llovía.", infinitive:"estar", answer:"estaba", note:"yo + -aba"},
+  {sentence:"Tú ____ mucha paciencia con nosotros.", infinitive:"tener (tú)", answer:"tenías", note:"tú + -ías"},
+  {sentence:"Ella ____ la guitarra en su habitación.", infinitive:"tocar", answer:"tocaba", note:"ella + -aba"},
+  {sentence:"Nosotros ____ al mercado cada sábado.", infinitive:"ir", answer:"íbamos", note:"nosotros + ir (irregular): íbamos"},
+  {sentence:"Vosotros ____ historias increíbles.", infinitive:"contar (vosotros)", answer:"contabais", note:"vosotros + -abais"},
+  {sentence:"Ellos ____ en el mismo barrio que nosotros.", infinitive:"vivir (ellos)", answer:"vivían", note:"ellos + -ían"},
+  {sentence:"Yo ____ que el mundo era muy pequeño.", infinitive:"creer", answer:"creía", note:"yo + -ía"},
+  {sentence:"Tú ____ siempre las mismas canciones.", infinitive:"cantar (tú)", answer:"cantabas", note:"tú + -abas"},
+  {sentence:"Él ____ diez años cuando ocurrió.", infinitive:"tener", answer:"tenía", note:"él + -ía"},
+  {sentence:"Nosotros ____ muy felices aquel verano.", infinitive:"ser", answer:"éramos", note:"nosotros + ser (irregular): éramos"},
+  {sentence:"Vosotros ____ mucho por las mañanas.", infinitive:"correr (vosotros)", answer:"corríais", note:"vosotros + -íais"},
+  {sentence:"Ellos ____ al cine todos los viernes.", infinitive:"ir (ellos)", answer:"iban", note:"ellos + ir (irregular): iban"},
+  {sentence:"Yo ____ un vestido azul en aquella foto.", infinitive:"llevar", answer:"llevaba", note:"yo + -aba"},
+  {sentence:"Tú ____ muy nerviosa antes de los exámenes.", infinitive:"estar (tú)", answer:"estabas", note:"tú + -abas"},
+  {sentence:"Ella ____ cartas a su familia cada mes.", infinitive:"escribir", answer:"escribía", note:"ella + -ía"},
+  {sentence:"Nosotros ____ música clásica por las noches.", infinitive:"escuchar", answer:"escuchábamos", note:"nosotros + -ábamos"},
+  {sentence:"Vosotros ____ muy buenos amigos entonces.", infinitive:"ser (vosotros)", answer:"erais", note:"vosotros + ser (irregular): erais"},
+  {sentence:"Ellos ____ que nosotros mentíamos.", infinitive:"pensar (ellos)", answer:"pensaban", note:"ellos + -aban"},
+  {sentence:"Yo ____ mucho antes de tomar decisiones.", infinitive:"dudar", answer:"dudaba", note:"yo + -aba"},
+  {sentence:"Tú siempre ____ mucha suerte en los juegos.", infinitive:"tener (tú)", answer:"tenías", note:"tú + -ías"},
+  {sentence:"Él ____ el periódico cada mañana.", infinitive:"leer", answer:"leía", note:"él + -ía"},
+  {sentence:"Nosotros ____ felices sin darnos cuenta.", infinitive:"estar", answer:"estábamos", note:"nosotros + -ábamos"}
+];
+
+const ROUNDS = 40;
+const START_LIVES = 5;
+
+let questions = [];
+let idx = 0;
+let score = 0;
+let lives = START_LIVES;
+let correctCount = 0;
+let streak = 0;
+let bestStreak = 0;
+let locked = false;
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function normalize(s){
+  return s
+    .toLowerCase()
+    .trim()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ');
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startGame(){
+  questions = shuffle(BANK);
+  idx = 0; score = 0; lives = START_LIVES; correctCount = 0; streak = 0; bestStreak = 0;
+  document.getElementById('qTotal').textContent = questions.length;
+  showScreen('screenGame');
+  renderQuestion();
+}
+
+function renderHUD(){
+  document.getElementById('qNum').textContent = idx+1;
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('hearts').textContent = '♥ '.repeat(lives).trim() + ' ' + '♡ '.repeat(START_LIVES-lives).trim();
+  document.getElementById('progressFill').style.width = ((idx)/questions.length*100)+'%';
+}
+
+function renderQuestion(){
+  locked = false;
+  const q = questions[idx];
+  renderHUD();
+
+  const parts = q.sentence.split('____');
+  const sentenceEl = document.getElementById('sentenceText');
+  sentenceEl.innerHTML = parts[0] + '<span class="blank">_____</span>' + (parts[1] || '');
+  document.getElementById('infinitiveTag').textContent = q.infinitive;
+
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback';
+
+  const input = document.getElementById('answerInput');
+  input.value = '';
+  input.className = 'answer-input';
+  input.disabled = false;
+  document.getElementById('checkBtn').disabled = false;
+  setTimeout(()=>input.focus(), 50);
+}
+
+function handleAnswer(){
+  if(locked) return;
+  const q = questions[idx];
+  const input = document.getElementById('answerInput');
+  const chosen = input.value;
+  if(!chosen.trim()) return;
+
+  locked = true;
+  input.disabled = true;
+  document.getElementById('checkBtn').disabled = true;
+
+  const fb = document.getElementById('feedback');
+  if(normalize(chosen) === normalize(q.answer)){
+    input.classList.add('correct');
+    score += 10 + streak*2;
+    correctCount++;
+    streak++;
+    bestStreak = Math.max(bestStreak, streak);
+    fb.textContent = '✓ Correcto — ' + q.note;
+    fb.className = 'feedback correct';
+  } else {
+    input.classList.add('wrong');
+    input.classList.add('shake');
+    streak = 0;
+    lives--;
+    fb.textContent = '✗ Era «' + q.answer + '» — ' + q.note;
+    fb.className = 'feedback wrong';
+  }
+
+  setTimeout(()=>{
+    if(lives <= 0){
+      endGame();
+    } else if(idx+1 >= questions.length){
+      idx++;
+      endGame();
+    } else {
+      idx++;
+      renderQuestion();
+    }
+  }, 1600);
+}
+
+function endGame(){
+  document.getElementById('progressFill').style.width = '100%';
+  showScreen('screenEnd');
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('finalCorrect').textContent = correctCount + '/' + questions.length;
+  document.getElementById('finalStreak').textContent = bestStreak;
+  const acc = Math.round((correctCount/questions.length)*100);
+  document.getElementById('finalAccuracy').textContent = acc + '%';
+  document.getElementById('finalLabel').textContent = lives <= 0 ? 'SIN VIDAS — PUNTOS' : 'PUNTOS';
+}
+
+document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('replayBtn').addEventListener('click', startGame);
+document.getElementById('checkBtn').addEventListener('click', handleAnswer);
+document.getElementById('answerInput').addEventListener('keydown', (e)=>{
+  if(e.key === 'Enter') handleAnswer();
+});
+
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'asi-era-antes-spanish-by-rocio.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+</script>
+
+</body>
+</html>
