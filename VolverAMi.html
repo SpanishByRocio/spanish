@@ -1,0 +1,364 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>VolverAMi</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;1,500&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: una columna tranquila con mucho aire; un solo color de acento (salvia), títulos en rojo; frases clave en serif grande para recordarlas */
+:root{
+  --bg:#F7F8F6; --ink:#2F3632; --soft:#6B746F; --line:#E2E6E2; --accent:#5C7A6B; --accent-soft:#E2EEE7; --red:#B33A3A; --want-ink:#2E5E48;
+  --quote:"Lora", Georgia, serif;
+  --body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1C201E; --ink:#E9EEEA; --soft:#A8B2AC; --line:#323A36; --accent:#9DBCAC; --accent-soft:#24362D; --red:#F29A9A; --want-ink:#BFE6D2; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1C201E; --ink:#E9EEEA; --soft:#A8B2AC; --line:#323A36; --accent:#9DBCAC; --accent-soft:#24362D; --red:#F29A9A; --want-ink:#BFE6D2; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.65}
+.wrap{max-width:620px;margin:0 auto;padding-block:24px 72px;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:40px}
+nav{display:flex;gap:24px;justify-content:center;border-bottom:1px solid var(--line)}
+nav a{text-decoration:none;color:var(--soft);font-size:16px;padding:12px 2px;min-height:44px;border-bottom:2px solid transparent;margin-bottom:-1px}
+nav a[aria-current="page"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:700}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+p{margin:0}
+h1{font-family:var(--quote);font-weight:500;font-size:clamp(28px,6.5vw,36px);line-height:1.2;margin:0;text-wrap:balance;color:var(--red)}
+h2{font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin:0}
+.view{display:flex;flex-direction:column;gap:40px}
+.hero{display:flex;flex-direction:column;gap:20px}
+.mantra{font-family:var(--quote);font-style:italic;font-size:clamp(21px,5vw,24px);line-height:1.45;color:var(--accent);border-left:2px solid var(--accent);padding-left:18px}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:32px}
+.step{display:grid;grid-template-columns:32px minmax(0,1fr);gap:14px}
+.n{font-family:var(--quote);font-size:22px;color:var(--accent);line-height:1.5}
+.step .b{display:flex;flex-direction:column;gap:8px;min-width:0}
+.say{font-family:var(--quote);font-size:21px;line-height:1.45}
+.key{background:var(--accent-soft);border-radius:14px;padding:18px 20px;margin-left:-20px;margin-right:-20px}
+.soft{color:var(--soft)}
+.link{color:var(--accent);font-weight:700;text-decoration:underline;text-underline-offset:4px;display:inline-flex;min-height:44px;align-items:center}
+/* Hoja 2 */
+.q{font-family:var(--quote);font-size:clamp(22px,5.2vw,26px);line-height:1.4;text-wrap:balance}
+.legend{display:flex;flex-direction:column;gap:8px}
+.topic{display:flex;flex-direction:column;gap:22px;padding-top:28px;border-top:1px solid var(--line)}
+.topic h3{font-family:var(--quote);font-weight:500;font-size:23px;line-height:1.3;margin:0;color:var(--red);text-wrap:balance}
+.pairs{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:20px}
+.pairs li{display:flex;flex-direction:column;gap:6px}
+.was{color:var(--soft);font-size:16px;font-style:italic;line-height:1.55}
+.want{display:grid;grid-template-columns:22px minmax(0,1fr);font-family:var(--quote);font-size:20px;line-height:1.45;color:var(--want-ink);background:var(--accent-soft);border-radius:12px;padding:12px 16px}
+.want::before{content:"→";color:var(--accent)}
+.end{display:flex;flex-direction:column;gap:12px;padding-top:28px;border-top:1px solid var(--line)}
+nav{flex-wrap:wrap;gap:4px 20px}
+/* Mi prioridad */
+.garden{display:flex;flex-direction:column;gap:10px;background:var(--accent-soft);border-radius:16px;padding:18px 20px}
+.garden .count{font-family:var(--quote);font-size:21px;color:var(--want-ink)}
+.flowers{display:flex;flex-wrap:wrap;gap:4px;min-height:30px;color:var(--accent)}
+.flowers svg{width:28px;height:28px}
+.flowers .empty{font-size:15px;color:var(--soft)}
+.weeks{display:flex;flex-direction:column;gap:18px}
+.week{display:flex;flex-direction:column;gap:8px}
+.week .wl{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.day{appearance:none;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;min-height:58px;padding:6px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:inherit;cursor:pointer;position:relative}
+.day .dn{font-size:12px;color:var(--soft)}
+.day .dd{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums}
+.day.today{border-color:var(--red)}
+.day.done{background:var(--accent-soft);border-color:var(--accent-soft)}
+.day.done::after{content:"";position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--accent)}
+.day[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:1px}
+.day:disabled{opacity:.4;cursor:default}
+.day:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.entry{display:flex;flex-direction:column;gap:20px;padding-top:24px;border-top:1px solid var(--line)}
+.entry h3{font-family:var(--quote);font-weight:500;font-size:24px;margin:0;color:var(--red)}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-family:var(--quote);font-size:19px;line-height:1.4}
+.field.main label{color:var(--want-ink);font-size:21px}
+textarea{font:inherit;font-size:17px;line-height:1.55;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-height:88px;resize:vertical;width:100%}
+.field.main textarea{border-color:var(--accent);background:var(--accent-soft)}
+textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.status{font-size:14px;color:var(--soft);min-height:1.4em}
+.closing{font-family:var(--quote);font-style:italic;font-size:20px;line-height:1.5;color:var(--accent);border-left:2px solid var(--accent);padding-left:18px}
+</style>
+
+<div class="wrap">
+  <nav aria-label="Secciones">
+    <a href="#protocolo" id="tab-protocolo">Cuando quiera buscarlo</a>
+    <a href="#lo-que-vivi" id="tab-vivi">Lo que viví</a>
+    <a href="#prioridad" id="tab-prioridad">Mi prioridad</a>
+  </nav>
+
+  <section class="view" id="protocolo">
+    <header class="hero">
+      <h1>Cuando mi mente me pida buscarlo</h1>
+      <div class="mantra">
+        <p>Un recuerdo no es una invitación a regresar.</p>
+        <p>Una emoción no exige una acción.</p>
+      </div>
+    </header>
+
+    <ol class="steps">
+      <li class="step"><span class="n" aria-hidden="true">1</span><div class="b">
+        <h2>Pensamiento</h2>
+        <p class="say">«Estoy teniendo el pensamiento de que quiero hablar con él».</p>
+      </div></li>
+      <li class="step"><span class="n" aria-hidden="true">2</span><div class="b">
+        <h2>Emoción</h2>
+        <p>Ponle nombre: nostalgia, tristeza, miedo, inseguridad, rechazo o necesidad de cercanía.</p>
+      </div></li>
+      <li class="step"><span class="n" aria-hidden="true">3</span><div class="b key">
+        <h2>Separa emoción y acción</h2>
+        <p class="say">«Puedo sentir esto sin hacer nada al respecto».</p>
+      </div></li>
+      <li class="step"><span class="n" aria-hidden="true">4</span><div class="b">
+        <h2>Vuelve a los hechos</h2>
+        <p>Lee lo que viviste y lo que de verdad quieres. <a class="link" href="#lo-que-vivi">Leer lo que viví</a></p>
+        <p class="say">¿Contactarle me acerca a la relación que deseo, o solo alivia lo que siento ahora?</p>
+        <p class="soft">Escribirle sería un ibuprofeno: calma un rato, pero no cura.</p>
+      </div></li>
+      <li class="step"><span class="n" aria-hidden="true">5</span><div class="b">
+        <h2>Una acción a mi favor</h2>
+        <p>Sigo con mi día: mi trabajo, salir a caminar, hablar con alguien de confianza, retomar un proyecto o algo que me conecte con mi vida.</p>
+      </div></li>
+    </ol>
+  </section>
+
+  <section class="view" id="lo-que-vivi" hidden>
+    <header class="hero">
+      <h1>Lo que viví y lo que quiero vivir</h1>
+      <p class="q">Si dejara de pensar en lo que esta relación podría haber llegado a ser y observara únicamente lo que realmente fue, ¿sería la relación que elegiría para mí?</p>
+      <div class="legend"><p class="was">En gris y cursiva, lo que viví.</p><p class="want">En verde, lo que quiero vivir.</p></div>
+    </header>
+
+    <article class="topic">
+      <h3>Momentos en los que no me sentí importante</h3>
+      <ul class="pairs">
+        <li><p class="was">En su cumpleaños.</p></li>
+        <li><p class="was">Cuando decía que no sabía si yo era «ella».</p><p class="want">Que esté seguro de mí.</p></li>
+        <li><p class="was">Cuando decía que no era su prioridad.</p><p class="want">Sentir que soy su prioridad.</p></li>
+        <li><p class="was">Cuando me dijo que no me amaba.</p><p class="want">Que me diga que me ama, y que lo diga de corazón.</p></li>
+        <li><p class="was">Cuando me dijo que sus sentimientos se habían evaporado.</p><p class="want">Que no dude de sus sentimientos ni de sus intenciones conmigo.</p></li>
+        <li><p class="was">Cuando se olvidó de mí en el cumple de Josu.</p><p class="want">Que no se olvide de mí.</p></li>
+        <li><p class="was">Cuando no se sentó conmigo en su cumple, y cuando durmió solo esa noche.</p><p class="want">Que me haga sentir vista y me cuide en los eventos y en cualquier lugar.</p></li>
+        <li><p class="was">Cuando me dijo que no podía ir con él y sus amigos a ver la final de España, por si ganaba, y prefirió ir con sus amigos.</p><p class="want">Que tengamos igualdad y me avise con antelación, para que yo también pueda hacer mis planes.</p></li>
+        <li><p class="was">Cuando quería ir solo al cumple de Lady, pero si iban chicos al cumple de mi amiga, él sí podía venir conmigo.</p></li>
+        <li><p class="was">Cuando me dijo «te llamo en dos semanas a ver si me aclaro, pero no me esperes».</p><p class="want">Que no me deje con intermitencia y dudas. Estas cosas no pueden pasar; de hecho, nunca me habían pasado.</p></li>
+        <li><p class="was">Cuando me dijo que me merezco a alguien que me dé lo que necesito.</p><p class="want">Que me haga sentir que soy suficiente y que le gusta cómo soy.</p></li>
+        <li><p class="was">Cuando él podía quedar con su vecina, a la que no conocía, y yo no podía quedar con un nuevo amigo.</p><p class="want">Igualdad y honestidad.</p></li>
+      </ul>
+    </article>
+
+    <article class="topic">
+      <h3>Situaciones en las que mis necesidades quedaron en segundo plano</h3>
+      <ul class="pairs">
+        <li><p class="was">Cuando él podía usar mi tablet y no me explicaba, porque según él mi proyecto ya funcionaba.</p><p class="want">Que no sea egoísta, que le importen mis cosas y me ayude a mejorar.</p></li>
+        <li><p class="was">Cuando yo era la que iba a su casa y él nunca preguntaba si quería que viniera a la mía.</p><p class="want">Que haya equilibrio.</p></li>
+        <li><p class="was">Cuando no quise tener intimidad y parecía más importante que él sí quería, y yo debía sentirme mal por ello. Además de todas las obscenidades que recibí por no querer.</p><p class="want">Poder decir tranquila «hoy no quiero intimidad», igual que mi compañero.</p></li>
+        <li><p class="was">No pasar tiempo conmigo entre semana: en horario laboral no nos podíamos ni hablar, aunque compartíamos casa y espacio.</p><p class="want">Si trabaja en casa, poder saludarnos y hablar con respeto y normalidad, sin interrumpir nuestras llamadas.</p></li>
+        <li><p class="was">Cuando yo necesitaba hablar y él necesitaba espacio para, supuestamente, organizar su cabeza y sus sentimientos.</p></li>
+      </ul>
+    </article>
+
+    <article class="topic">
+      <h3>Ocasiones en las que me sentí culpable por poner un límite o decir que no</h3>
+      <ul class="pairs">
+        <li><p class="was">Con lo del sexo.</p></li>
+        <li><p class="was">Si algún día quedaba con una amiga.</p></li>
+        <li><p class="was">Cuando iba a bailar.</p></li>
+        <li><p class="was">Cuando quedaba con un amigo varón.</p></li>
+        <li><p class="was">Cuando un día me fui a dormir a mi casa porque me hizo sentir triste, y me culpó por irme.</p></li>
+        <li><p class="want">No sentirme culpable por hacer cosas que me gustan y que no tienen maldad ni segundas intenciones, aunque sus miedos le hagan pensar que sí. Que eso no me afecte. Lo ideal es alguien sin esos miedos: una persona segura.</p></li>
+      </ul>
+    </article>
+
+    <article class="topic">
+      <h3>Momentos en los que dejé de sentirme segura de mí misma</h3>
+      <ul class="pairs">
+        <li><p class="was">Todos, desde el primer mes. Me sentía más insegura durante todo el día, en cada cosa que hacía y con cada persona con la que hablaba. Ya no era yo.</p></li>
+      </ul>
+    </article>
+
+    <article class="topic">
+      <h3>Situaciones en las que sentí que tenía que adaptarme constantemente</h3>
+      <ul class="pairs">
+        <li><p class="was">Su casa.</p></li>
+        <li><p class="was">El gimnasio.</p></li>
+        <li><p class="was">Su forma de comer.</p></li>
+        <li><p class="was">Darle esos espacios que pedía sin quejarme.</p></li>
+        <li><p class="was">Básicamente todo. Él siempre me hizo pensar que no era suficiente, o que no me acercaba a su chica ideal, y yo creía que si no hacía esas cosas estaría todavía más lejos de esa persona que él quería.</p></li>
+      </ul>
+    </article>
+
+    <div class="end">
+      <p class="mantra">Esto es lo que fue. Yo elijo lo que quiero vivir.</p>
+      <a class="link" href="#protocolo">Volver al protocolo</a>
+    </div>
+  </section>
+
+  <section class="view" id="prioridad" hidden>
+    <header class="hero">
+      <h1>Volver a ser mi prioridad</h1>
+      <p class="soft">Cada día, una cosa nueva que hago por mí. Cada día que lo escribes, nace una flor en tu jardín.</p>
+    </header>
+
+    <div class="garden" aria-live="polite">
+      <p class="count" id="count">Tu jardín está esperando su primera flor.</p>
+      <div class="flowers" id="flowers"></div>
+    </div>
+
+    <div class="weeks" id="weeks"></div>
+
+    <div class="entry" id="entry">
+      <h3 id="entry-title">Hoy</h3>
+      <div class="field main">
+        <label for="f-nuevo">¿Qué cosa nueva he hecho hoy por mí?</label>
+        <textarea id="f-nuevo" data-k="nuevo" placeholder="Algo pequeño también cuenta"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-q1">¿Qué he hecho hoy por mí?</label>
+        <textarea id="f-q1" data-k="q1"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-q2">¿En qué momento he respetado mis necesidades?</label>
+        <textarea id="f-q2" data-k="q2"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-q3">¿Qué pequeña decisión he tomado hoy que me acerca a la vida que quiero?</label>
+        <textarea id="f-q3" data-k="q3"></textarea>
+      </div>
+      <p class="status" id="status"></p>
+    </div>
+
+    <p class="closing">No tienes que conseguir que alguien te elija. También puedes preguntarte si esa persona es alguien a quien tú elegirías para compartir la vida que estás construyendo.</p>
+  </section>
+</div>
+
+<script>
+(function(){
+  var views={protocolo:document.getElementById('protocolo'),'lo-que-vivi':document.getElementById('lo-que-vivi'),prioridad:document.getElementById('prioridad')};
+  var tabs={protocolo:document.getElementById('tab-protocolo'),'lo-que-vivi':document.getElementById('tab-vivi'),prioridad:document.getElementById('tab-prioridad')};
+  function show(){
+    var k=(location.hash||'').slice(1); if(!views[k]) k='protocolo';
+    for(var v in views){views[v].hidden=(v!==k); if(v===k) tabs[v].setAttribute('aria-current','page'); else tabs[v].removeAttribute('aria-current');}
+    window.scrollTo(0,0);
+  }
+  window.addEventListener('hashchange',show); show();
+})();
+
+(function(){
+  var DN=['L','M','X','J','V','S','D'];
+  var MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  var DIAS=['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+  var KEYS=['nuevo','q1','q2','q3'];
+  var LS='mi-prioridad-v1';
+  var SEED={'2026-10-29':{
+    nuevo:'Volví a sentirme feliz desde el alma en mis clases, como hacía tiempo que no sentía.',
+    q1:'Puse límites a mi madre, desayuné, comí y volví a sentirme feliz desde el alma en mis clases. Empecé a sentirme yo otra vez. No he respondido el mail de mi ex.',
+    q2:'Pienso que en todo momento, pero sobre todo al no responder a Mauro el mail.',
+    q3:'No responderle y valorarme.'}};
+
+  function key(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+  function parse(k){var p=k.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+  function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+
+  var today=new Date(); today.setHours(0,0,0,0);
+  var todayK=key(today);
+  var start=new Date(2026,9,26);
+  var dow=(today.getDay()+6)%7;
+  var end=addDays(today,6-dow+21);
+  if(end<addDays(start,27)) end=addDays(start,27);
+
+  var data={};
+  try{var raw=localStorage.getItem(LS); if(raw) data=JSON.parse(raw)||{};}catch(e){}
+  var col=null, selected=todayK<key(start)?key(start):todayK, timers={}, writing={}, queued={};
+
+  function entry(k){return data[k]||SEED[k]||{}}
+  function done(k){var e=entry(k);return KEYS.some(function(x){return e[x]&&String(e[x]).trim()})}
+
+  var weeksEl=document.getElementById('weeks');
+  function renderWeeks(){
+    weeksEl.textContent='';
+    for(var w=new Date(start); w<=end; w=addDays(w,7)){
+      var wk=document.createElement('div'); wk.className='week';
+      var lab=document.createElement('p'); lab.className='wl';
+      var we=addDays(w,6);
+      lab.textContent='Semana del '+w.getDate()+' '+MES[w.getMonth()]+' al '+we.getDate()+' '+MES[we.getMonth()];
+      var row=document.createElement('div'); row.className='days';
+      for(var i=0;i<7;i++){
+        var d=addDays(w,i), k=key(d);
+        var b=document.createElement('button'); b.type='button'; b.className='day'; b.id='d-'+k;
+        if(k===todayK) b.classList.add('today');
+        if(done(k)) b.classList.add('done');
+        b.setAttribute('aria-pressed',k===selected?'true':'false');
+        b.setAttribute('aria-label',DIAS[d.getDay()]+' '+d.getDate()+' de '+MES[d.getMonth()]+(done(k)?', escrito':''));
+        if(d>today) b.disabled=true;
+        var s1=document.createElement('span'); s1.className='dn'; s1.textContent=DN[i];
+        var s2=document.createElement('span'); s2.className='dd'; s2.textContent=d.getDate();
+        b.appendChild(s1); b.appendChild(s2);
+        (function(k){b.addEventListener('click',function(){flushAll();selected=k;renderWeeks();renderEntry();document.getElementById('entry').scrollIntoView({behavior:'smooth',block:'start'});});})(k);
+        row.appendChild(b);
+      }
+      wk.appendChild(lab); wk.appendChild(row); weeksEl.appendChild(wk);
+    }
+  }
+
+  var FLOWER='<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="var(--accent-soft)" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="6.5" r="3.3"/><circle cx="17.2" cy="10.3" r="3.3"/><circle cx="15.2" cy="16.4" r="3.3"/><circle cx="8.8" cy="16.4" r="3.3"/><circle cx="6.8" cy="10.3" r="3.3"/></g><circle cx="12" cy="12" r="2.6" fill="var(--red)"/></svg>';
+  function renderGarden(){
+    var n=0; for(var d=new Date(start); d<=today; d=addDays(d,1)) if(done(key(d))) n++;
+    document.getElementById('count').textContent = n===0 ? 'Tu jardín está esperando su primera flor.' : (n===1 ? '1 día eligiéndome.' : n+' días eligiéndome.');
+    var f=document.getElementById('flowers'); f.innerHTML='';
+    for(var i=0;i<n;i++) f.insertAdjacentHTML('beforeend',FLOWER);
+  }
+
+  var fields=KEYS.map(function(k){return document.querySelector('textarea[data-k="'+k+'"]')});
+  function renderEntry(){
+    var d=parse(selected), e=entry(selected);
+    document.getElementById('entry-title').textContent=(selected===todayK?'Hoy, ':'')+DIAS[d.getDay()]+' '+d.getDate()+' de '+MES[d.getMonth()];
+    fields.forEach(function(t){ if(document.activeElement!==t || !timers[selected]) t.value=e[t.dataset.k]||''; });
+    document.getElementById('status').textContent='';
+  }
+  function status(t){document.getElementById('status').textContent=t}
+
+  function saveLocal(){try{localStorage.setItem(LS,JSON.stringify(data))}catch(e){}}
+  function write(k){
+    var body={}; KEYS.forEach(function(x){body[x]=(data[k]&&data[k][x])||''}); body.fecha=k;
+    saveLocal();
+    if(!col){status('Guardado en este móvil.');return}
+    if(writing[k]){queued[k]=true;return}
+    writing[k]=true; status('Guardando…');
+    col.doc('dia-'+k).set(body).then(function(){status('Guardado.');},function(err){
+      status(err&&err.code==='quota_exceeded'?'No queda espacio para guardar más días.':'No se pudo guardar en la nube; queda guardado en este móvil.');
+    }).then(function(){writing[k]=false; if(queued[k]){queued[k]=false; write(k);}});
+  }
+  function flushAll(){for(var k in timers){clearTimeout(timers[k]);delete timers[k];write(k);}}
+  fields.forEach(function(t){
+    t.addEventListener('input',function(){
+      var k=selected; data[k]=Object.assign({},entry(k)); data[k][t.dataset.k]=t.value;
+      renderGarden();
+      var b=document.getElementById('d-'+k); if(b) b.classList.toggle('done',done(k));
+      clearTimeout(timers[k]); timers[k]=setTimeout(function(){delete timers[k];write(k);},900);
+    });
+    t.addEventListener('blur',flushAll);
+  });
+
+  renderWeeks(); renderGarden(); renderEntry();
+
+  if(window.claude&&window.claude.use){
+    Promise.all([window.claude.use('db'),window.claude.use('user')]).then(function(r){
+      var db=r[0], user=r[1]; if(!db||!user) return null;
+      return user.id().then(function(uid){
+        if(!uid) return;
+        col=db.collection('data/users/'+uid);
+        col.onSnapshot(function(snap){
+          snap.docs.forEach(function(doc){
+            var b=doc.data(); if(!b||!b.fecha) return;
+            if(timers[b.fecha]) return;
+            data[b.fecha]={nuevo:b.nuevo||'',q1:b.q1||'',q2:b.q2||'',q3:b.q3||''};
+          });
+          saveLocal(); renderWeeks(); renderGarden();
+          if(!timers[selected] && !fields.some(function(t){return document.activeElement===t})) renderEntry();
+        },function(){col=null;});
+      });
+    }).catch(function(){});
+  }
+})();
+</script>
+
+</body></html>
